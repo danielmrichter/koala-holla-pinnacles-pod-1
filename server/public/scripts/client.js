@@ -51,21 +51,24 @@ function renderKoalas(koalas) {
   viewKoalasTable.innerHTML = '';
 
   for (let koala of koalas) {
-    viewKoalasTable.innerHTML += (`
+    viewKoalasTable.innerHTML += `
   <tr>
-    <td>${koala.name}</td>
-    <td>${koala.age}</td>
-    <td>${koala.favorite_color}</td>
+    <td id=koalaName${koala.id} contenteditable="true">${koala.name}</td>
+    <td id=koalaAge${koala.id} contenteditable="true">${koala.age}</td>
+    <td id=koalaColor${koala.id} contenteditable="true">${koala.favorite_color}</td>
     <td>${koala.ready_to_transfer}</td>
-    <td>${koala.notes}</td>
+    <td id=koalaNotes${koala.id} contenteditable="true">${koala.notes}</td>
     <td>
       <button onclick="transferChange(${koala.id})">Ready For Transfer</button>
     </td>
     <td>
       <button onClick="deleteKoalas(${koala.id})">Delete</button>
     </td>
+    <td>
+      <button onClick="updateKoala(${koala.id})">Update Info</button>
+    </td>
   </tr>
-  `)
+  `
   }
 };
 
@@ -83,7 +86,6 @@ function transferChange(koalaId) {
     })
 };
 
-
 function deleteKoalas(koalaId) {
   axios({
     method: `DELETE`,
@@ -97,6 +99,7 @@ function deleteKoalas(koalaId) {
   })
 }
 
+
 let allKoalas = []; 
 document.getElementById('filterInput').addEventListener('input', function () {
   const filterValue = this.value.toLowerCase();
@@ -109,5 +112,26 @@ document.getElementById('filterInput').addEventListener('input', function () {
   );
   renderKoalas(filteredKoalas);
 });
-
-getKoalas()
+function updateKoala(koalaId) {
+   let newKoalaName = document.getElementById(`koalaName${koalaId}`).innerText
+   let newKoalaAge = document.getElementById(`koalaAge${koalaId}`).innerText
+   let newKoalaColor = document.getElementById(`koalaColor${koalaId}`).innerText
+   let newKoalaNote = document.getElementById(`koalaNotes${koalaId}`).innerText
+   let updateObj = {
+    newKoalaName: newKoalaName,
+    newKoalaAge: newKoalaAge,
+    newKoalaColor: newKoalaColor,
+    newKoalaNote: newKoalaNote
+   }
+   console.log(`Koala update info to PATCH:`, updateObj)
+   axios({
+    method: `PATCH`,
+    url: `/koalas/${koalaId}`,
+    data: updateObj
+   }).then((response) =>{
+    getKoalas()
+   }).catch((error) =>{
+    console.log(`Error in PATCH updateKoala: `, error)
+   })
+}
+getKoalas();
