@@ -3,9 +3,9 @@
 
 CREATE TABLE "koalas" (
 	"id" SERIAL PRIMARY KEY,
-	"name" VARCHAR(200),
-	"favorite_color"VARCHAR(20),
-	"age" INTEGER,
+	"name" VARCHAR(200) NOT NULL, 
+	"favorite_color"VARCHAR(20) NOT NULL,
+	"age" INTEGER NOT NULL,
 	"ready_to_transfer" BOOLEAN DEFAULT false,
 	"notes" VARCHAR(500)
 	);

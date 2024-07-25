@@ -35,6 +35,11 @@ function saveKoala() {
     data: koalatoSubmit
   }).then ((response) =>{
     getKoalas()
+    document.getElementById(`nameIn`).value = ``
+    document.getElementById(`ageIn`).value = ``
+    document.getElementById(`ageIn`).value = ``
+    document.getElementById(`readyForTransferIn`).value
+    document.getElementById(`notesIn`).value = ``
   }).catch((error) =>{
     console.log(`Error in POST /koalas response: `, error)
   })
