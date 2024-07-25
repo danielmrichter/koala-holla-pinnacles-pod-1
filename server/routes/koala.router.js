@@ -2,13 +2,37 @@ const express = require('express');
 const koalaRouter = express.Router();
 
 // DB CONNECTION
-
+const pool = require(`../modules/pool.js`)
 
 // GET
 
 
 // POST
-
+koalaRouter.post(`/`, (req, res) => {
+    // console.log(`Request in koala /POST made! `, req.body)
+    let koalaTransfer
+    if(req.body.koalaTransfer === `false`){
+        koalaTransfer = false}
+    if(req.body.koalaTransfer === `true`){
+        koalaTransfer = true}
+    let koalaName = req.body.koalaName
+    let koalaColor = req.body.koalaColor
+    let koalaAge = req.body.koalaAge
+    let koalaNote = req.body.koalaNote
+    // console.log(`koalaTransfer before SQL Query is:`, koalaTransfer)
+    let sqlText = `INSERT INTO "koalas"
+	("name", "age", "favorite_color", "ready_to_transfer", "notes")
+	VALUES
+	($1, $2, $3, $4, $5);`
+    let sqlValues = [koalaName, koalaAge, koalaColor, koalaTransfer, koalaNote]
+    pool.query(sqlText, sqlValues)
+        .then((dbResponse) =>{
+            res.sendStatus(201)
+        }).catch((dbErr) => {
+            console.log(`SQL Query error in koalas/POST: `, dbErr)
+            res.sendStatus(500)
+        })
+})
 
 // PUT
 
