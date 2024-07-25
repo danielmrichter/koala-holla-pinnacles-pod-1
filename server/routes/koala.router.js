@@ -6,7 +6,10 @@ const pool = require(`../modules/pool.js`)
 
 // GET
 koalaRouter.get('/', (req, res) => {
-    let queryText = 'SELECT * FROM "koalas";';
+    let queryText = `
+            SELECT * FROM "koalas"
+                ORDER BY "id";
+    `;
     
     pool.query(queryText).then(result => {
       // Sends back the results in an object
@@ -46,7 +49,29 @@ koalaRouter.post(`/`, (req, res) => {
 })
 
 // PUT
-
+koalaRouter.put('/:koala_id', (req, res) => {
+    console.log(`PUT /koalas/:koala_id received a request!`);
+  
+    const koalaIdToUpdate = req.params.koala_id;
+    const transferStatus = req.body.transfer;
+    
+    let sqlText = `
+      UPDATE "koalas"
+        SET "ready_to_transfer" = 'true'
+        WHERE "id" = $1;
+    `
+  
+    const sqlValues = [koalaIdToUpdate];
+  
+    pool.query(sqlText, sqlValues)
+      .then((dbResult) => {
+        res.sendStatus(200);
+      })
+      .catch((dbError) => {
+        console.log('SQL query error in PUT /koalas/:koala_id', dbError);
+        res.sendStatus(500);
+      })
+  })
 
 // DELETE
 koalaRouter.delete('/:koalaId', (req, res) => {
