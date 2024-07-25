@@ -90,4 +90,20 @@ koalaRouter.delete('/:koalaId', (req, res) => {
         })
     
 })
+
+// PATCH
+koalaRouter.patch(`/:koalaId`, (req, res) =>{
+    const sqlText = `
+    UPDATE "koalas"
+	    SET "name" = $1, "age" = $2, "favorite_color" = $3, "notes" = $4
+	    WHERE "id" = $5;`
+    const sqlValues = [req.body.newKoalaName, req.body.newKoalaAge, req.body.newKoalaColor, req.body.newKoalaNote, req.params.koalaId]
+    pool.query(sqlText, sqlValues)
+    .then((response) =>{
+        res.sendStatus(200)
+    }).catch((dbErr) =>{
+        console.log(`SQL Query error in koalas/PATCH: `, dbErr)
+        res.sendStatus(500)
+    })
+})
 module.exports = koalaRouter;
