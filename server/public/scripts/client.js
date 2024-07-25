@@ -8,7 +8,8 @@ function getKoalas() {
     url: '/koalas'
   }).then(function (response) {
     console.log('getKoalas() response', response.data);
-    renderKoalas(response.data);
+    allKoalas = response.data;
+    renderKoalas(allKoalas);
   }).catch(function (error) {
     console.log('error in GET', error);
   });
@@ -84,6 +85,7 @@ function transferChange(koalaId) {
       console.log('transferChange() error:', error);
     })
 };
+
 function deleteKoalas(koalaId) {
   axios({
     method: `DELETE`,
@@ -97,6 +99,19 @@ function deleteKoalas(koalaId) {
   })
 }
 
+
+let allKoalas = []; 
+document.getElementById('filterInput').addEventListener('input', function () {
+  const filterValue = this.value.toLowerCase();
+  const filteredKoalas = allKoalas.filter(koala => 
+    koala.name.toLowerCase().includes(filterValue) ||
+    koala.age.toString().toLowerCase().includes(filterValue) ||
+    koala.favorite_color.toLowerCase().includes(filterValue) ||
+    koala.ready_to_transfer.toString().toLowerCase().includes(filterValue) ||
+    koala.notes.toLowerCase().includes(filterValue)
+  );
+  renderKoalas(filteredKoalas);
+});
 function updateKoala(koalaId) {
    let newKoalaName = document.getElementById(`koalaName${koalaId}`).innerText
    let newKoalaAge = document.getElementById(`koalaAge${koalaId}`).innerText
@@ -119,8 +134,4 @@ function updateKoala(koalaId) {
     console.log(`Error in PATCH updateKoala: `, error)
    })
 }
-
-
-
-
 getKoalas();
