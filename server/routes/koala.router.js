@@ -74,5 +74,20 @@ koalaRouter.put('/:koala_id', (req, res) => {
   })
 
 // DELETE
-
+koalaRouter.delete('/:koalaId', (req, res) => {
+    //
+    const sqlQuery = `
+    DELETE FROM "koalas"
+	WHERE "id" = $1;`
+    //Magic Spell to get paramater
+    const sqlValues = [req.params.koalaId]
+    pool.query(sqlQuery, sqlValues)
+        .then((dbResponse) => {
+            res.sendStatus(200)
+        }).catch((dbErr) =>{
+            console.log(`SQL Query error in koalas/DELETE: `, dbErr)
+            res.sendStatus(500)
+        })
+    
+})
 module.exports = koalaRouter;
