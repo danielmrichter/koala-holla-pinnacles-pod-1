@@ -43,6 +43,8 @@ function saveKoala() {
 function renderKoalas(koalas) {
   let viewKoalasTable = document.getElementById('viewKoalas');
 
+  viewKoalasTable.innerHTML = '';
+  
   for (let koala of koalas) {
     viewKoalasTable.innerHTML += (`
   <tr>
@@ -52,7 +54,7 @@ function renderKoalas(koalas) {
     <td>${koala.ready_to_transfer}</td>
     <td>${koala.notes}</td>
     <td>
-      <button onclick="">Ready For Transfer</button>
+      <button onclick="transferChange(${koala.id})">Ready For Transfer</button>
     </td>
     <td>
       <button onclick="">Delete</button>
@@ -61,5 +63,20 @@ function renderKoalas(koalas) {
   `)
   }
 };
+
+function transferChange(koalaId) {
+  axios({
+    method: 'PUT',
+    url: `/koalas/${koalaId}`,
+    data: {transfer: 'true'}
+  })
+    .then((response) => {
+      getKoalas();
+    })
+    .catch((error) => {
+      console.log('transferChange() error:', error);
+    })
+};
+
 
 getKoalas();
