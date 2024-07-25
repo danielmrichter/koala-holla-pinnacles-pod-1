@@ -1,0 +1,81 @@
+/* BODY STYLING */
+.body {
+    background-color: mintcream;
+}
+
+header {
+    align-items: center;
+    background-image: url('images/PPJ-Header_Eucalyptus-101_AdobeStock_147477090.webp');
+}
+
+#logoCompany {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgb(245, 255, 250, 0.5);
+    width:500px;
+}
+
+#address {
+    margin:15px;
+    padding: 15px;
+}
+
+.icon {
+    width: 150px;
+    height: 150px;
+    margin: 15px;
+}
+
+/* TABLE STYLING */
+table {
+    border: 1px solid darkolivegreen;
+    border-collapse: collapse;
+}
+
+th {
+    border: 1px solid darkolivegreen;
+    border-collapse: collapse;
+    text-align: left;
+    padding: 5px;
+}
+
+td {
+    border: 1px solid darkolivegreen;
+    border-collapse: collapse;
+    width: 150px;
+    padding: 5px;
+}
+
+td:nth-child(2) {
+    width: 50px;
+}
+
+td:nth-child(4) {
+    width: 75px;
+}
+
+td:nth-child(5) {
+    width: 300px;
+}
+
+td:nth-child(6) {
+    width: auto;
+}
+
+td:nth-child(7) {
+    width: auto;
+}
+
+td:nth-child(8) {
+    width: auto;
+}
+
+/* ERROR STYLING */
+.error {
+    border: 1px solid red;
+}
+
+#errorValidation {
+    color: red;
+}
