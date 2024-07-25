@@ -42,7 +42,6 @@ function saveKoala() {
 
 function renderKoalas(koalas) {
   let viewKoalasTable = document.getElementById('viewKoalas');
-
   for (let koala of koalas) {
     viewKoalasTable.innerHTML += (`
   <tr>
@@ -55,7 +54,7 @@ function renderKoalas(koalas) {
       <button onclick="">Ready For Transfer</button>
     </td>
     <td>
-      <button onclick="">Delete</button>
+      <button onClick="deleteKoalas(${koala.id})">Delete</button>
     </td>
   </tr>
   `)
@@ -63,3 +62,17 @@ function renderKoalas(koalas) {
 };
 
 getKoalas();
+
+function deleteKoalas(koalaId) {
+  axios({
+    method: `DELETE`,
+    url: `/koalas/${koalaId}`,
+
+  }).then ((response) =>{
+    console.log(`Delete in koalas response: `, response)
+    getKoalas()
+  }).catch((error) => {
+    console.log('Error in Delete koalas response: ', error)
+  })
+}
+
