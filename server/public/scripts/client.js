@@ -1,7 +1,7 @@
-console.log('js');
+console.log("js");
 
 function getKoalas() {
-  console.log('in getKoalas');
+  console.log("in getKoalas");
   // axios call to server to get koalas
   axios({
     method: 'GET',
@@ -18,37 +18,39 @@ function getKoalas() {
 function saveKoala() {
   // console.log('in saveKoala');
   // axios call to server to get koalas
-  const koalaName = document.getElementById(`nameIn`).value
-  const koalaAge = document.getElementById(`ageIn`).value
-  const koalaColor = document.getElementById(`colorIn`).value
-  const koalaTransfer = document.getElementById(`readyForTransferIn`).value
-  const koalaNote = document.getElementById(`notesIn`).value
+  const koalaName = document.getElementById(`nameIn`).value;
+  const koalaAge = document.getElementById(`ageIn`).value;
+  const koalaColor = document.getElementById(`colorIn`).value;
+  const koalaTransfer = document.getElementById(`readyForTransferIn`).value;
+  const koalaNote = document.getElementById(`notesIn`).value;
   let koalatoSubmit = {
     koalaName: koalaName,
     koalaAge: koalaAge,
     koalaColor: koalaColor,
     koalaTransfer: koalaTransfer,
-    koalaNote: koalaNote
-  }
+    koalaNote: koalaNote,
+  };
   axios({
     method: `POST`,
     url: `/koalas`,
-    data: koalatoSubmit
-  }).then ((response) =>{
-    getKoalas()
-    document.getElementById(`nameIn`).value = ``
-    document.getElementById(`ageIn`).value = ``
-    document.getElementById(`ageIn`).value = ``
-    document.getElementById(`readyForTransferIn`).value
-    document.getElementById(`notesIn`).value = ``
-  }).catch((error) =>{
-    console.log(`Error in POST /koalas response: `, error)
+    data: koalatoSubmit,
   })
+    .then((response) => {
+      getKoalas();
+      document.getElementById(`nameIn`).value = ``;
+      document.getElementById(`ageIn`).value = ``;
+      document.getElementById(`ageIn`).value = ``;
+      document.getElementById(`readyForTransferIn`).value;
+      document.getElementById(`notesIn`).value = ``;
+    })
+    .catch((error) => {
+      console.log(`Error in POST /koalas response: `, error);
+    });
 }
 
 function renderKoalas(koalas) {
-  let viewKoalasTable = document.getElementById('viewKoalas');
-  viewKoalasTable.innerHTML = '';
+  let viewKoalasTable = document.getElementById("viewKoalas");
+  viewKoalasTable.innerHTML = "";
 
   for (let koala of koalas) {
     viewKoalasTable.innerHTML += `
@@ -68,37 +70,54 @@ function renderKoalas(koalas) {
       <button onClick="updateKoala(${koala.id})">Update Info</button>
     </td>
   </tr>
-  `
+  `;
   }
-};
+}
 
 function transferChange(koalaId) {
   axios({
-    method: 'PUT',
+    method: "PUT",
     url: `/koalas/${koalaId}`,
-    data: {transfer: 'true'}
+    data: { transfer: "true" },
   })
     .then((response) => {
       getKoalas();
     })
     .catch((error) => {
-      console.log('transferChange() error:', error);
-    })
-};
-
-function deleteKoalas(koalaId) {
-  axios({
-    method: `DELETE`,
-    url: `/koalas/${koalaId}`,
-
-  }).then ((response) =>{
-    console.log(`Delete in koalas response: `, response)
-    getKoalas()
-  }).catch((error) => {
-    console.log('Error in Delete koalas response: ', error)
-  })
+      console.log("transferChange() error:", error);
+    });
 }
 
+function deleteKoalas(koalaId) {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios({
+        method: `DELETE`,
+        url: `/koalas/${koalaId}`,
+      })
+        .then(
+          (response) =>
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            }),
+          getKoalas()
+        )
+        .catch((error) => {
+          console.log("Error in Delete koalas response: ", error);
+        });
+    }
+  });
+}
 
 let allKoalas = []; 
 document.getElementById('filterInput').addEventListener('input', function () {
