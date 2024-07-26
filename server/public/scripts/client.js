@@ -140,12 +140,12 @@ function deleteKoalas(koalaId) {
       })
         .then(
           (response) =>
+            getKoalas(),
             Swal.fire({
               title: "Deleted!",
               text: "Your file has been deleted.",
               icon: "success",
             }),
-          getKoalas()
         )
         .catch((error) => {
           console.log("Error in Delete koalas response: ", error);
