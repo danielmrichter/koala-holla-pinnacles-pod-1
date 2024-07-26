@@ -1,59 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Koalla Holla</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script defer src="scripts/client.js" charset="utf-8"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </head>
-  <body>
-    <header>
-      <section id="logoCompany">
-        <img src="images/icon.png" class="icon" />
-        <section id="address">
-          <h1>Koala Holla</h1>
-          <h4>1976 Llama Comma Drive</h4>
-          <h4>Walla Walla, WA</h4>
-        </section>
+
+<head>
+  <meta charset="utf-8">
+  <title>Koalla Holla</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script defer src="scripts/client.js" charset="utf-8"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+  <header>
+    <section id="logoCompany">
+      <img src="images/icon.png" class="icon" />
+      <section id="address">
+        <h1>Koala Holla</h1>
+        <h4>1976 Llama Comma Drive</h4>
+        <h4>Walla Walla, WA</h4>
       </section>
-    </header>
-    <section id="addKoala">
-      <h2>Add Koala 🐨</h2>
-      <form id="koala-form">
-        <input type="text" id="nameIn" value="" placeholder="Name">
-        <input type="number" id="ageIn" value="" placeholder="Age">
-        <input type="text" id="colorIn" value="" placeholder="Favorite Color">
-        <select name="transfer-status" id="readyForTransferIn">
-          <option value="default">Ready for Transfer?</option>
-          <option value="false">No</option>
-          <option value="true">Yes</option>
-        </select>
-        <input type="text" id="notesIn" value="" placeholder="Notes">
-        <button type="button" id="addButton" onclick="saveKoala(event)">Add Koala</button>
-      </form>
-      <div id="errorValidation"></div>
     </section>
-    <section>
-      <h2>All Koalas 🐨 🐨 🐨</h2>
-      <input type="text" id="filterInput" placeholder="Search">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Favorite Color</th>
-            <th>Ready for Transfer</th>
-            <th>Notes</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="viewKoalas">
-        </tbody>
-      </table>
-    </section>
+  </header>
+  <section id="addKoala">
+    <h2>Add Koala 🐨</h2>
+    <form id="koala-form">
+      <span class="input-width"><input type="text" id="nameIn" value="" placeholder="Name" required><sup>*</sup></span>
+      <span class="input-width"><input type="number" id="ageIn" value="" placeholder="Age" required><sup>*</sup></span>
+      <span class="input-width"><input type="text" id="colorIn" value="" placeholder="Favorite Color" required><sup>*</sup></span>
+      <span class="input-width"><select name="transfer-status" id="readyForTransferIn" required>
+        <option value="default">Ready for Transfer?</option>
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+      </select><sup>*</sup></span>
+      <span class="input-width"><input type="text" id="notesIn" value="" placeholder="Notes"></span>
+      <button type="button" id="addButton" onclick="saveKoala(event)">Add Koala</button>
+    </form>
+    <p id="required-el">* required fields</p>
+    <div id="errorValidation"></div>
+  </section>
+  <section>
+    <h2>All Koalas 🐨 🐨 🐨</h2>
+    <input type="text" id="filterInput" placeholder="Search">
+    <div id="update-success"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Favorite Color</th>
+          <th>Ready for Transfer</th>
+          <th colspan="4">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="viewKoalas">
+      </tbody>
+    </table>
+  </section>
   </main>
 </body>
+
 </html>
