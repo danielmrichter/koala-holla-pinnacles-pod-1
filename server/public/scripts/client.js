@@ -5,6 +5,7 @@ let ageIn = document.getElementById('ageIn');
 let colorIn = document.getElementById('colorIn');
 let readyforTransferIn = document.getElementById('readyForTransferIn');
 let requiredEl = document.getElementById('required-el');
+let updateSuccess = document.getElementById('update-success');
 let valid = true;
 
 function getKoalas() {
@@ -183,7 +184,15 @@ function updateKoala(koalaId) {
     url: `/koalas/${koalaId}`,
     data: updateObj
   }).then((response) => {
-    getKoalas()
+    getKoalas();
+
+    updateSuccess.innerHTML = `
+    <p class="full">ℹ️ ${newKoalaName} has been updated successfully!</p><button onclick="removeAlert(event)">Remove Alert</button>
+    `;
+
+    updateSuccess.style.display = "flex";
+    updateSuccess.style.flexDirection = "row";
+
   }).catch((error) => {
     console.log(`Error in PATCH updateKoala: `, error)
   })
@@ -229,6 +238,10 @@ function isValidForm(name, age, color, transfer) {
   }
 
   return result;
+}
+
+function removeAlert(event) {
+  updateSuccess.style.display = "none";
 }
 
 getKoalas();

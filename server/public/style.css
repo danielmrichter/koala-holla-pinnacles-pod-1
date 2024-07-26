@@ -162,11 +162,26 @@ tr:nth-child(even) {
     background-color: mintcream;
 }
 
-/* ERROR STYLING */
+/* ERROR AND SUCCESS STYLING */
 .error {
     border: 1px solid red;
 }
 
 #errorValidation {
     color: red;
+}
+
+#update-success {
+    display: none;
+    width: 94%;
+    align-items: center;
+    border: 1px solid darkblue;
+    background-color: lightcyan;
+    color: darkblue;
+    padding: 5px 25px;
+    margin: 15px 5px;
+}
+
+.full {
+    width: 90%;
 }
