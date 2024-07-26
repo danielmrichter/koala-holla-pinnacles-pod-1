@@ -8,14 +8,15 @@ let notesIn = document.getElementById('notesIn');
 let valid = true;
 
 function getKoalas() {
-  console.log('in getKoalas');
+  console.log("in getKoalas");
   // axios call to server to get koalas
   axios({
     method: 'GET',
     url: '/koalas'
   }).then(function (response) {
     console.log('getKoalas() response', response.data);
-    renderKoalas(response.data);
+    allKoalas = response.data;
+    renderKoalas(allKoalas);
   }).catch(function (error) {
     console.log('error in GET', error);
   });
@@ -35,7 +36,6 @@ function saveKoala() {
   if (!isValidForm(koalaName, koalaAge, koalaColor, koalaTransfer, koalaNote)) {
     return;
   }
-
 
   let koalatoSubmit = {
     koalaName: koalaName,
@@ -58,14 +58,27 @@ function saveKoala() {
     document.getElementById(`notesIn`).value = ``
   }).catch((error) => {
     console.log(`Error in POST /koalas response: `, error)
+
   })
+    .then((response) => {
+      getKoalas();
+      document.getElementById(`nameIn`).value = ``;
+      document.getElementById(`ageIn`).value = ``;
+      document.getElementById(`ageIn`).value = ``;
+      document.getElementById(`readyForTransferIn`).value;
+      document.getElementById(`notesIn`).value = ``;
+    })
+    .catch((error) => {
+      console.log(`Error in POST /koalas response: `, error);
+    });
 }
 
 function renderKoalas(koalas) {
-  let viewKoalasTable = document.getElementById('viewKoalas');
-  viewKoalasTable.innerHTML = '';
+  let viewKoalasTable = document.getElementById("viewKoalas");
+  viewKoalasTable.innerHTML = "";
 
   for (let koala of koalas) {
+
     let transferStatus;
 
     if (koala.ready_to_transfer) {
@@ -74,52 +87,106 @@ function renderKoalas(koalas) {
       transferStatus = "No";
     }
 
-    viewKoalasTable.innerHTML += (`
+    viewKoalasTable.innerHTML += `
   <tr>
-    <td>${koala.name}</td>
-    <td>${koala.age}</td>
-    <td>${koala.favorite_color}</td>
+    <td id=koalaName${koala.id} contenteditable="true">${koala.name}</td>
+    <td id=koalaAge${koala.id} contenteditable="true">${koala.age}</td>
+    <td id=koalaColor${koala.id} contenteditable="true">${koala.favorite_color}</td>
     <td>${transferStatus}</td>
-    <td>${koala.notes}</td>
+    <td id=koalaNotes${koala.id} contenteditable="true">${koala.notes}</td>
     <td>
       <button onclick="transferChange(${koala.id})">Ready For Transfer</button>
     </td>
     <td>
       <button onClick="deleteKoalas(${koala.id})">Delete</button>
     </td>
+    <td>
+      <button onClick="updateKoala(${koala.id})">Update Info</button>
+    </td>
   </tr>
-  `)
+  `;
   }
-};
+}
 
 function transferChange(koalaId) {
   axios({
-    method: 'PUT',
+    method: "PUT",
     url: `/koalas/${koalaId}`,
     data: { transfer: 'true' }
+
   })
     .then((response) => {
       getKoalas();
     })
     .catch((error) => {
-      console.log('transferChange() error:', error);
-    })
-};
-
-
-getKoalas();
+      console.log("transferChange() error:", error);
+    });
+}
 
 function deleteKoalas(koalaId) {
-  axios({
-    method: `DELETE`,
-    url: `/koalas/${koalaId}`,
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios({
+        method: `DELETE`,
+        url: `/koalas/${koalaId}`,
+      })
+        .then(
+          (response) =>
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            }),
+          getKoalas()
+        )
+        .catch((error) => {
+          console.log("Error in Delete koalas response: ", error);
+        });
+    }
+  });
+}
 
-  }).then((response) => {
-    console.log(`Delete in koalas response: `, response)
+let allKoalas = []; 
+document.getElementById('filterInput').addEventListener('input', function () {
+  const filterValue = this.value.toLowerCase();
+  const filteredKoalas = allKoalas.filter(koala => 
+    koala.name.toLowerCase().includes(filterValue) ||
+    koala.age.toString().toLowerCase().includes(filterValue) ||
+    koala.favorite_color.toLowerCase().includes(filterValue) ||
+    koala.ready_to_transfer.toString().toLowerCase().includes(filterValue) ||
+    koala.notes.toLowerCase().includes(filterValue)
+  );
+  renderKoalas(filteredKoalas);
+});
+function updateKoala(koalaId) {
+   let newKoalaName = document.getElementById(`koalaName${koalaId}`).innerText
+   let newKoalaAge = document.getElementById(`koalaAge${koalaId}`).innerText
+   let newKoalaColor = document.getElementById(`koalaColor${koalaId}`).innerText
+   let newKoalaNote = document.getElementById(`koalaNotes${koalaId}`).innerText
+   let updateObj = {
+    newKoalaName: newKoalaName,
+    newKoalaAge: newKoalaAge,
+    newKoalaColor: newKoalaColor,
+    newKoalaNote: newKoalaNote
+   }
+   console.log(`Koala update info to PATCH:`, updateObj)
+   axios({
+    method: `PATCH`,
+    url: `/koalas/${koalaId}`,
+    data: updateObj
+   }).then((response) =>{
     getKoalas()
-  }).catch((error) => {
-    console.log('Error in Delete koalas response: ', error)
-  })
+   }).catch((error) =>{
+    console.log(`Error in PATCH updateKoala: `, error)
+   })
 }
 
 function isValidForm(name, age, color, transfer, notes) {
@@ -165,3 +232,5 @@ if (!Number(age)) {
 
   return result;
 }
+
+getKoalas();
