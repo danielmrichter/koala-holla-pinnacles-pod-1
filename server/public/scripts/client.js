@@ -157,5 +157,11 @@ function isValidForm(name, age, color, transfer, notes) {
     errorValidation.innerHTML += `
     <p>Please complete required fields!</p>`;
   }
+
+if (!Number(age)) {
+  ageIn.classList.add('error');
+    result = false;
+}
+
   return result;
 }

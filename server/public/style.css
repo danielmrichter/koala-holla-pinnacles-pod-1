@@ -1,11 +1,31 @@
-/* BODY STYLING */
-.body {
+/* BODY AND TEXT STYLING */
+body {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
     background-color: mintcream;
 }
 
+main {
+    background-color: mintcream;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+}
+
+h2 {
+    margin: 0px;
+}
+
+/* HEADER STYLING */
 header {
     align-items: center;
     background-image: url('images/PPJ-Header_Eucalyptus-101_AdobeStock_147477090.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
 }
 
 #logoCompany {
@@ -26,6 +46,13 @@ header {
     height: 150px;
     margin: 15px;
 }
+/* FORM STYLING  */
+#addKoala {
+    border: 3px solid goldenrod;
+    margin: 20px;
+    padding: 30px;
+}
+
 
 /* TABLE STYLING */
 table {
@@ -34,10 +61,12 @@ table {
 }
 
 th {
-    border: 1px solid darkolivegreen;
+    border-right: 1px solid white;
     border-collapse: collapse;
     text-align: left;
     padding: 5px;
+    background-color: darkolivegreen;
+    color: white;
 }
 
 td {
@@ -45,6 +74,7 @@ td {
     border-collapse: collapse;
     width: 150px;
     padding: 5px;
+    
 }
 
 td:nth-child(2) {
