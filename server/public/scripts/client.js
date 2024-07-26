@@ -4,7 +4,7 @@ let nameIn = document.getElementById('nameIn');
 let ageIn = document.getElementById('ageIn');
 let colorIn = document.getElementById('colorIn');
 let readyforTransferIn = document.getElementById('readyForTransferIn');
-let notesIn = document.getElementById('notesIn');
+let requiredEl = document.getElementById('required-el');
 let valid = true;
 
 function getKoalas() {
@@ -33,7 +33,7 @@ function saveKoala() {
 
   console.log('koalaTransfer is:', koalaTransfer)
 
-  if (!isValidForm(koalaName, koalaAge, koalaColor, koalaTransfer, koalaNote)) {
+  if (!isValidForm(koalaName, koalaAge, koalaColor, koalaTransfer)) {
     return;
   }
 
@@ -154,10 +154,10 @@ function deleteKoalas(koalaId) {
   });
 }
 
-let allKoalas = []; 
+let allKoalas = [];
 document.getElementById('filterInput').addEventListener('input', function () {
   const filterValue = this.value.toLowerCase();
-  const filteredKoalas = allKoalas.filter(koala => 
+  const filteredKoalas = allKoalas.filter(koala =>
     koala.name.toLowerCase().includes(filterValue) ||
     koala.age.toString().toLowerCase().includes(filterValue) ||
     koala.favorite_color.toLowerCase().includes(filterValue) ||
@@ -167,37 +167,38 @@ document.getElementById('filterInput').addEventListener('input', function () {
   renderKoalas(filteredKoalas);
 });
 function updateKoala(koalaId) {
-   let newKoalaName = document.getElementById(`koalaName${koalaId}`).innerText
-   let newKoalaAge = document.getElementById(`koalaAge${koalaId}`).innerText
-   let newKoalaColor = document.getElementById(`koalaColor${koalaId}`).innerText
-   let newKoalaNote = document.getElementById(`koalaNotes${koalaId}`).innerText
-   let updateObj = {
+  let newKoalaName = document.getElementById(`koalaName${koalaId}`).innerText
+  let newKoalaAge = document.getElementById(`koalaAge${koalaId}`).innerText
+  let newKoalaColor = document.getElementById(`koalaColor${koalaId}`).innerText
+  let newKoalaNote = document.getElementById(`koalaNotes${koalaId}`).innerText
+  let updateObj = {
     newKoalaName: newKoalaName,
     newKoalaAge: newKoalaAge,
     newKoalaColor: newKoalaColor,
     newKoalaNote: newKoalaNote
-   }
-   console.log(`Koala update info to PATCH:`, updateObj)
-   axios({
+  }
+  console.log(`Koala update info to PATCH:`, updateObj)
+  axios({
     method: `PATCH`,
     url: `/koalas/${koalaId}`,
     data: updateObj
-   }).then((response) =>{
+  }).then((response) => {
     getKoalas()
-   }).catch((error) =>{
+  }).catch((error) => {
     console.log(`Error in PATCH updateKoala: `, error)
-   })
+  })
 }
 
-function isValidForm(name, age, color, transfer, notes) {
+function isValidForm(name, age, color, transfer) {
   let result = true;
   nameIn.classList.remove('error');
   ageIn.classList.remove('error');
   colorIn.classList.remove('error');
   readyforTransferIn.classList.remove('error');
   notesIn.classList.remove('error');
+  requiredEl.style.display = 'block';
 
-  errorValidation.innerText = " ";
+  errorValidation.innerText = '';
 
   if (name.length === 0) {
     nameIn.classList.add('error');
@@ -215,20 +216,17 @@ function isValidForm(name, age, color, transfer, notes) {
     readyforTransferIn.classList.add('error');
     result = false;
   }
-  if (notes.length === 0) {
-    notesIn.classList.add('error');
-    result = false;
-  }
 
   if (!result) {
     errorValidation.innerHTML += `
     <p>Please complete required fields!</p>`;
+    requiredEl.style.display = 'none';
   }
 
-if (!Number(age)) {
-  ageIn.classList.add('error');
+  if (!Number(age)) {
+    ageIn.classList.add('error');
     result = false;
-}
+  }
 
   return result;
 }
